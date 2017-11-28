@@ -1,4 +1,5 @@
 var Context = require('../domain/context');
+var Runner = require('../domain/runner');
 var States = require('../domain/states');
 var Snapshots = require('../domain/snapshots');
 var config = require('../../config/config.json');
@@ -63,7 +64,26 @@ exports.game.currentState = function (req, res, next) {
 }
 
 exports.game.playAction = function (req, res, next) {
-  res.send(204);
+  var player = req.player;
+  var action = req.param.action;
+
+  if(!player) {
+    console.log('ERROR: Game play action. No player');
+    res.send(401);
+  } else if(!action) {
+    console.log('ERROR: Game play action. No action');
+    res.send(401);
+	} else {
+	  Runner.playFlowAction('game', player, action)
+	    .then(result => {
+	      res.send(result);
+	    })
+	    .catch(err => {
+	      console.log('ERROR: Game play action. ' + err.stack);
+	      res.send(500);
+	    });
+	}
+  
   return next();
 }
 

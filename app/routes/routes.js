@@ -18,8 +18,8 @@ exports.assignRoutes = function (app, restify) {
   app.get('/flow/game', flow.game.currentState);
   console.log('Add route GET /flow/game');
   
-  //app.put('/flow/game', flow.game.playAction);
-  //console.log('Add route PUT /flow/game');
+  app.put('/flow/game', flow.game.playAction);
+  console.log('Add route PUT /flow/game');
   
   //app.del('/flow/game', flow.game.resetState);
   //console.log('Add route DELETE /flow/game');

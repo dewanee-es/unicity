@@ -1,4 +1,6 @@
-console.log('Unicity server v.0.0.1.20171119');
+const config = require('./config/config.json');
+
+console.log(config.name + ' server v.' + config.version);
 
 var restify = require('restify');
 var playersDomain = require('./app/domain/players');
