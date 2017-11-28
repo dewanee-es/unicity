@@ -1,5 +1,7 @@
-exports.newContext = function (player, environment) {
-  return new Proxy({ player: player, environment: environment }, {
+const config = require('../../config/config.json');
+
+exports.newContext = function (flow, player, environment) {
+  return new Proxy({ flow: flow, player: player, environment: environment, vars: config.vars }, {
     get: function(target, property) {
       var descriptor = this.getOwnPropertyDescriptor(target, property);
       return descriptor ? descriptor.value : undefined;
@@ -13,6 +15,8 @@ exports.newContext = function (player, environment) {
         value = target.player[property];
       } else if(property in target.environment) {
         value = target.environment[property];
+      } else if(property in target.vars) {
+        value = target.vars[property];
       } else {
         return undefined;
       }

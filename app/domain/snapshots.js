@@ -1,8 +1,8 @@
 var dataRepo = require('../repo/data');
 
-exports.loadSnapshot = function ({ id }) {
+exports.loadSnapshot = function (flow) {
   return new Promise(function(resolve, reject) {
-    dataRepo.loadSnapshot(id)
+    dataRepo.loadSnapshot(flow.player.id)
       .then(snapshot => {
         resolve(snapshot);
       })
@@ -12,9 +12,10 @@ exports.loadSnapshot = function ({ id }) {
   });
 }
 
-exports.saveSnapshot = function ({ id }, snapshot) {
+exports.saveSnapshot = function (flow, snapshot) {
   return new Promise(function(resolve, reject) {
-    dataRepo.saveSnapshot(id, snapshot)
+    Object.assign(snapshot, { flow: flow.name });
+    dataRepo.saveSnapshot(flow.player.id, snapshot)
       .then(snapshot => {
         resolve(snapshot);
       })

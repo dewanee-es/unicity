@@ -27,34 +27,14 @@ exports.game.currentState = function (req, res, next) {
   var player = req.player;
     
   if(player) {  
-    Snapshots.loadSnapshot(player)
-      .then(snapshot => {
-        if(snapshot === false) {
-          States.loadState(config.start)
-            .then(state => {
-              var context = Context.newContext(player, {});
-              var snapshot = States.bindState(state, context);
-              Snapshots.saveSnapshot(player, snapshot)
-                .then(snapshot => {
-                  res.send(snapshot.state);
-                })
-                .catch(err => {
-                  console.log('ERROR: Save snapshot. ' +  err.stack);
-                  res.send(500);
-                })
-            })
-            .catch(err => {
-              console.log('ERROR: Load state. ' + err.stack);
-              res.send(500);
-            });
-        } else {
-          res.send(snapshot.state);
-        }
-      })
-      .catch(err => {
-        console.log('ERROR: Load snapshot. ' + err.stack);
-        res.send(500);
-      });
+    Runner.currentFlowState('game', player)
+    .then(result => {
+      res.send(result);
+    })
+    .catch(err => {
+      console.log('ERROR: Game current state. ' + (err.stack ? err.stack : err));
+      res.send(err.stack ? 500 : 400);
+    });
   } else {
     console.log('ERROR: Game current state. No player');
     res.send(401);
@@ -65,7 +45,7 @@ exports.game.currentState = function (req, res, next) {
 
 exports.game.playAction = function (req, res, next) {
   var player = req.player;
-  var action = req.param.action;
+  var action = req.body ? req.body.action : false;
 
   if(!player) {
     console.log('ERROR: Game play action. No player');
@@ -79,8 +59,8 @@ exports.game.playAction = function (req, res, next) {
 	      res.send(result);
 	    })
 	    .catch(err => {
-	      console.log('ERROR: Game play action. ' + err.stack);
-	      res.send(500);
+	      console.log('ERROR: Game play action. ' + (err.stack ? err.stack : err));
+	      res.send(err.stack ? 500 : 400);
 	    });
 	}
   

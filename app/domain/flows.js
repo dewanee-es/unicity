@@ -1,13 +1,15 @@
+const Context = require('./context');
 const Events = require('./events');
 const Snapshots = require('./snapshots');
+const States = require('./states');
 
 function runState(flow, state) {
   return new Promise(function (resolve, reject) {
     States.loadState(state)
       .then(state => {
-        var context = Context.newContext(flow.player, flow.environment);
+        var context = Context.newContext(flow.name, flow.player, flow.environment);
         var snapshot = States.bindState(state, context);
-        Snapshots.saveSnapshot(player, snapshot)
+        Snapshots.saveSnapshot(flow, snapshot)
           .then(snapshot => {
             resolve(snapshot.state);
           })
@@ -21,7 +23,7 @@ function runState(flow, state) {
   });
 }
 
-exports.newFlow = function (name, player) {
+function newFlow(name, player) {
   return {
     name: name,
     player: player,
@@ -29,16 +31,38 @@ exports.newFlow = function (name, player) {
   };
 }
 
-exports.executeAction = function (flow, action) {
+exports.newFlow = newFlow;
+
+function currentState(flow) {
   return new Promise(function (resolve, reject) {
-    Snapshots.loadSnapshot(flow.player)
+    Snapshots.loadSnapshot(flow)
+    .then(snapshot => {
+      if(snapshot === false || snapshot.flow != flow.name) {
+        resolve(runState(flow, flow.name));
+      } else {
+        resolve(snapshot.state);
+      }
+    })
+    .catch(err => {
+      console.log('ERROR: Load snapshot. ' + err.stack);
+      res.send(500);
+    });
+
+  })
+}
+
+exports.currentState = currentState;
+
+function executeAction(flow, action) {
+  return new Promise(function (resolve, reject) {
+    Snapshots.loadSnapshot(flow)
       .then(snapshot => {
         if(snapshot === false || snapshot.flow != flow.name) {
           resolve(runState(flow, flow.name));
         } else {
           var command = Events.onAction(snapshot.events, action);
           if(command) {
-            resolve(this.handleCommand(flow, command));
+            resolve(handleCommand(flow, command));
           } else {
             resolve(snapshot.state);
           }
@@ -50,7 +74,9 @@ exports.executeAction = function (flow, action) {
   });
 }
 
-exports.handleCommand = function (flow, command) {
+exports.executeAction = executeAction;
+
+function handleCommand(flow, command) {
   return new Promise(function (resolve, reject) {
     var stateName = command;
     resolve(runState(flow, stateName));
