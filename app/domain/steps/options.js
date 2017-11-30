@@ -1,4 +1,5 @@
 const { shuffle } = require('../../tools/data_tools');
+const Events = require('../events');
 
 function Options(options) {
   this.options = options;
@@ -27,7 +28,7 @@ Options.prototype.fillOptionsEvents = function (options, list, events) {
       fillOptionsEvents(option.value.items, sublist, events);
       option.value = sublist;
     } else {
-      events[option.key] = option.key;
+      events[option.key] = Events.newEvent('go', option.key);
     }
     
     list.push({ key: option.key, value: option.value });

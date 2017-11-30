@@ -2,32 +2,26 @@ var Flows = require('./flows');
 
 exports.currentFlowState = function (name, player) {
   return new Promise(function (resolve, reject) {
-    if(name == 'game') {
-      if(!player.complete) {
-        reject('Incomplete player');
-      } else {
-        var flow = Flows.newFlow(name, player);
+    Flows.newFlow(name, player)
+      .then(flow => {
         Flows.currentState(flow)
           .then(result => {
             resolve(result);
           })
           .catch(err => {
             reject(err);
-          })
-      }
-    } else {
-      reject('Unkown flow: ' + name);
-    }
+          })        
+      })
+      .catch(err => {
+        reject(err);
+      })
   });
 }
 
 exports.playFlowAction = function (name, player, action) {
   return new Promise(function (resolve, reject) {
-    if(name == 'game') {
-      if(!player.complete) {
-        reject('Incomplete player');
-      } else {
-        var flow = Flows.newFlow(name, player);
+    Flows.newFlow(name, player)
+      .then(flow => {
         Flows.executeAction(flow, action)
           .then(result => {
             resolve(result);
@@ -35,9 +29,9 @@ exports.playFlowAction = function (name, player, action) {
           .catch(err => {
             reject(err);
           })
-      }
-    } else {
-      reject('Unkown flow: ' + name);
-    }
+      })
+      .catch(err => {
+        reject(err);
+      })
   });
 }

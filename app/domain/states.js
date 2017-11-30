@@ -15,15 +15,11 @@ exports.loadState = function (name) {
   });
 }
 
-exports.bindState = function (state, context) {
-  var output = {
-    state: {},
-    events: {}
-  };
-  
+exports.bindState = function (state, context, snapshot) {
   for(var step in state) {
-    Steps.executeStep(step, state[step], context, output);
+    var command = Steps.executeStep(step, state[step], context, snapshot);
+    if(command) {
+      return command;
+    }
   }
-  
-  return output;
 }

@@ -122,9 +122,14 @@ exports.loadJsonIfExists = function (file, notExists) {
 
 var loadYaml = function (file) {
   return new Promise(function(resolve, reject) {
+    var path = './data/' + file + '.yml';
     try {
-      data = yaml.safeLoad(fs.readFileSync('./data/' + file + '.yml', 'utf8'));
-      resolve(data);
+      if(fs.existsSync(path)) {
+        var data = yaml.safeLoad(fs.readFileSync(, 'utf8'));
+        resolve(data);
+      } else {
+        reject('File ' + path + ' doesn\'t exist');
+      }
     } catch (e) {
       reject(e);
     }

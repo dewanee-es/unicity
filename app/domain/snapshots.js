@@ -1,10 +1,21 @@
 var dataRepo = require('../repo/data');
 
+exports.newSnapshot = function (flow) {
+  return {
+    state: {},
+    events: {}
+  });
+}
+
 exports.loadSnapshot = function (flow) {
   return new Promise(function(resolve, reject) {
     dataRepo.loadSnapshot(flow.player.id)
       .then(snapshot => {
-        resolve(snapshot);
+        if(snapshot.flow == flow.name) {
+          resolve(snapshot);
+        } else {
+          resolve(false);
+        }
       })
       .catch(err => {
         reject(err);
