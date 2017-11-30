@@ -9,3 +9,5 @@ Game.create = function (data) {
   
   return new Game(data);
 }
+
+module.exports = Game;

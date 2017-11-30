@@ -4,7 +4,7 @@ exports.newSnapshot = function (flow) {
   return {
     state: {},
     events: {}
-  });
+  };
 }
 
 exports.loadSnapshot = function (flow) {

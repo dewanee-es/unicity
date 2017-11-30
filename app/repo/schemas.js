@@ -48,6 +48,7 @@ schemas.state = (loader) => {
         set: set,
         increment: increment
       }),
+    call: string(),       // Call subflow
     view:                 // View representation
       map({
         render: string(),     // Type of view to render, eg. choice, talk, map, etc...

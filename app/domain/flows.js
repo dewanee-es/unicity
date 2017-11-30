@@ -16,7 +16,7 @@ function runState(flow, state) {
         if(command) {
           resolve(handleCommand(flow, command));
         } else {
-          Snapshots.saveSnapshot(flow, snapshot)
+          Snapshots.saveSnapshot(flow, flow.snapshot)
             .then(snapshot => {
               resolve(snapshot.state);
             })
@@ -45,7 +45,7 @@ function newFlow(name, player) {
     } catch(e) {
       reject(e);
     }
-  }
+  });
 }
 
 exports.newFlow = newFlow;

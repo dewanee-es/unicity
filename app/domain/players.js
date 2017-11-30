@@ -51,6 +51,7 @@ function decoratePlayer(player) {
       return 'unknown';
     }
   }
+  return player;
 }
 
 exports.createPlayer = function (playerData) {

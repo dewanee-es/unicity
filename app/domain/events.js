@@ -1,6 +1,6 @@
 exports.newEvent = function (command, value) {
   return {
-    command: command,
+    name: command,
     value: value
   }
 }

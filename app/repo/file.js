@@ -125,7 +125,7 @@ var loadYaml = function (file) {
     var path = './data/' + file + '.yml';
     try {
       if(fs.existsSync(path)) {
-        var data = yaml.safeLoad(fs.readFileSync(, 'utf8'));
+        var data = yaml.safeLoad(fs.readFileSync(path, 'utf8'));
         resolve(data);
       } else {
         reject('File ' + path + ' doesn\'t exist');
