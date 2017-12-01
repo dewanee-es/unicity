@@ -1,43 +1,49 @@
-var profile = require('./profile');
-var player = require('./player');
 var flow = require('./flow');
+var player = require('./player');
+var character = require('./character');
 
 exports.assignRoutes = function (app, restify) {
   //app.post('/login', player.login);
   //console.log('Add route POST /login');
   
-  //app.get('/flow/profile', flow.profile.currentState);
-  //console.log('Add route GET /flow/profile');
+  //app.get('/profile/state', flow.profile.state);
+  //console.log('Add route GET /profile/state');
   
-  //app.put('/flow/profile', flow.profile.playAction);
-  //console.log('Add route PUT /flow/profile');
+  //app.post('/profile/start', flow.profile.start);
+  //console.log('Add route POST /profile/start');
   
-  //app.del('/flow/profile', flow.profile.resetState);
-  //console.log('Add route DELETE /flow/profile');
+  //app.post('/profile/save', flow.profile.next);
+  //console.log('Add route POST /profile/next');
   
-  app.get('/flow/game', flow.game.currentState);
-  console.log('Add route GET /flow/game');
+  //app.post('/profile/end', flow.profile.end);
+  //console.log('Add route POST /profile/end');
   
-  app.put('/flow/game', flow.game.playAction);
-  console.log('Add route PUT /flow/game');
+  app.get('/game/state', flow.game.state);
+  console.log('Add route GET /game/state');
   
-  //app.del('/flow/game', flow.game.resetState);
-  //console.log('Add route DELETE /flow/game');
+  //app.post('/game/start', flow.game.start);
+  //console.log('Add route POST /game/start');
+  
+  app.post('/game/play', flow.game.play);
+  console.log('Add route POST /game/play');
+  
+  //app.post('/game/stop', flow.game.stop);
+  //console.log('Add route POST /game/stop');
+  
+  app.get('/character/occupation', character.occupation.search);
+  console.log('Add route GET /character/occupation');
   
   app.get(/\/character\/.*/, restify.plugins.serveStatic({
     directory: './assets'
   }));
   console.log('Add route GET /character/:attribute/:value');
   
-  app.get('/profile/occupation', profile.searchOccupation);
-  console.log('Add route GET /profile/occupation');
-  
-  //app.get('/player', player.currentPlayer);
+  //app.get('/player', player.current);
   //console.log('Add route GET /player');
   
-  //app.post('/player', player.createPlayer);
+  //app.post('/player', player.create);
   //console.log('Add route POST /player');
   
-  //app.del('/player', player.deletePlayer);
+  //app.del('/player', player.remove);
   //console.log('Add route DELETE /player');
 }

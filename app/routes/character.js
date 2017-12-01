@@ -1,4 +1,4 @@
-var occupationDomain = require('../domain/occupations');
+var occupationDomain = require('../domain/occupations');  // TODO
 
 exports.searchOccupation = function (req, res, next) {
   var player = req.player;

@@ -1,3 +1,5 @@
+// TODO
+
 function Game(data) {
   Object.assign(this, data);
 }

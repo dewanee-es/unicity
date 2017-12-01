@@ -3,17 +3,23 @@ const Events = require('./events');
 const Snapshots = require('./snapshots');
 const States = require('./states');
 
-function runState(flow, state) {
-  return new Promise(function (resolve, reject) {
-    States.loadState(state)
-      .then(state => {
-        if(!flow.snapshot) {
-          flow.snapshot = Snapshots.newSnapshot(flow);
-        }
-        
-        var context = Context.newContext(flow.name, flow.player, flow.environment);
-        var command = States.bindState(state, context, flow.snapshot);
-        if(command) {
+function Flow(name) {
+  this.name = name
+}
+
+Flow.create = function (name) {
+  return new Flow(name)
+}
+
+// TODO
+
+Flow.prototype.state = async function (name) {
+  try {
+    var state = await States.loadState(name);
+    var context = Context.newContext(flow.name, flow.player, flow.environment);
+    var output = await States.bindState(state, context);
+    if(output.command) {
+      return
           resolve(handleCommand(flow, command));
         } else {
           Snapshots.saveSnapshot(flow, flow.snapshot)
@@ -99,3 +105,5 @@ function handleCommand(flow, command) {
     resolve(handler(flow, command));
   });
 }
+
+module.exports = Flow

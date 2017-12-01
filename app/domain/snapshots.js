@@ -1,49 +1,44 @@
 var dataRepo = require('../repo/data');
 
-exports.newSnapshot = function (flow) {
-  return {
-    state: {},
-    events: {}
-  };
+const Snapshots = {
+
+  create: function () {
+    return {
+      scene: {},
+      environment: {},
+      flow: {}
+    }
+  },
+  
+  load: async function (player, flowname) {
+    try {
+      var snapshot = await dataRepo.loadSnapshot(player.id)
+      if(snapshot.flow.name == flowname) {
+        return snapshot
+      } else {
+        return false
+      }
+    } catch(err) {
+      return Promise.reject(err)
+    }
+  },
+  
+  save: async function (player, snapshot) {
+    try {
+      return dataRepo.saveSnapshot(player.id, snapshot)
+    } catch(err) {
+      return Promise.reject(err)
+    }
+  },
+  
+  remove: async function (player) {
+    try {
+      return dataRepo.deleteSnapshot(player.id)
+    } catch(err) {
+      return Promise.reject(err)
+    }
+  }
+
 }
 
-exports.loadSnapshot = function (flow) {
-  return new Promise(function(resolve, reject) {
-    dataRepo.loadSnapshot(flow.player.id)
-      .then(snapshot => {
-        if(snapshot.flow == flow.name) {
-          resolve(snapshot);
-        } else {
-          resolve(false);
-        }
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
-}
-
-exports.saveSnapshot = function (flow, snapshot) {
-  return new Promise(function(resolve, reject) {
-    Object.assign(snapshot, { flow: flow.name });
-    dataRepo.saveSnapshot(flow.player.id, snapshot)
-      .then(snapshot => {
-        resolve(snapshot);
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
-}
-
-exports.deleteSnapshot = function ({ id }) {
-  return new Promise(function(resolve, reject) {
-    dataRepo.deleteSnapshot(id)
-      .then(() => {
-        resolve(true);
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
-}
+module.exports = Snapshots
