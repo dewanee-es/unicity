@@ -1,15 +1,17 @@
-// TODO
-
-function Game(data) {
-  Object.assign(this, data);
+function Game(player) {
+  Flow.call(this, 'game', player)
 }
 
-Game.create = function (data) {
-  if(!data.player.complete) {
+Game.prototype = Flow.prototype
+
+Game.prototype.constructor = Game
+
+Game.create = function (player) {
+  if(!player.complete) {
     throw new Error('Incomplete player');
   }
   
-  return new Game(data);
+  return new Game(player);
 }
 
 module.exports = Game;

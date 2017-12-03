@@ -24,7 +24,7 @@ Runner.prototype.state = async function (flowname) {
 
 Runner.prototype.play = async function (flowname, action) {
   try {
-    var snapshot = awit Snapshots.load(this.player, flowname)
+    var snapshot = await Snapshots.load(this.player, flowname)
     if(snapshot) {
       var flow = await Flows.load(snapshot.flow, this.player)  // TODO
       var scene = await flow.play(actiom, snapshot.environment)
@@ -44,9 +44,9 @@ Runner.prototype.play = async function (flowname, action) {
 
 Runner.prototype.start = async function (flowname) {
   try {
-    var flow = Flows.create(flowname)
+    var flow = Flows.create(flowname, this.player)
     var snapshot = Snapshots.create()
-    snapshot.scene = flow.state(flowname)
+    snapshot.scene = await flow.state(flowname, snapshot.environment)
     snapshot.flow = flow.save()
     await Snapshots.save(this.player, snapshot)
     return snapshot.scene

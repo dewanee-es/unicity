@@ -9,9 +9,9 @@ Options.create = function (options) {
   return new Options(options);
 }
 
-Options.prototype.execute = function (context, { state, events }) {
-  state.options = [];
-  this.fillOptionsEvents(this.options, state.options, events);
+Options.prototype.execute = function (context, scene, events) {
+  scene.options = [];
+  this.fillOptionsEvents(this.options, scene.options, events);
 }
 
 Options.prototype.fillOptionsEvents = function (options, list, events) {

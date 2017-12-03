@@ -3,41 +3,32 @@ const Events = require('./events');
 const Snapshots = require('./snapshots');
 const States = require('./states');
 
-function Flow(name) {
+function Flow(name, player) {
   this.name = name
+  this.player = player
 }
 
-Flow.create = function (name) {
-  return new Flow(name)
+Flow.create = function (name, player) {
+  return new Flow(name, player)
 }
 
 // TODO
 
-Flow.prototype.state = async function (name) {
+Flow.prototype.state = async function (name, environment) {
   try {
-    var state = await States.loadState(name);
-    var context = Context.newContext(flow.name, flow.player, flow.environment);
-    var output = await States.bindState(state, context);
-    if(output.command) {
-      return
-          resolve(handleCommand(flow, command));
-        } else {
-          Snapshots.saveSnapshot(flow, flow.snapshot)
-            .then(snapshot => {
-              resolve(snapshot.state);
-            })
-            .catch(err => {
-              reject(err);
-            })
-        }
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
+    var state = await States.loadState(name)
+    var context = Context.newContext(this.name, this.player, environment)
+    var scene = {}
+    this.events = {}
+    var command = await States.bindState(state, context, scene, this.events)
+    if(command) {
+      this.handleCommand(command, context, scene)
+    }
+    return scene
+  } catch(err) {
+    return Promise.reject(err)
+  }
 }
-
-exports.runState = runState;
 
 function newFlow(name, player) {
   return new Promise(function (resolve, reject) {

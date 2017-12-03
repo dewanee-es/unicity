@@ -29,7 +29,7 @@ const Flow = {
     start: function (req, res, next) {
       res.send(204);
       return next();
-    }
+    },
     
     play: function (req, res, next) {
       var player = req.player;
@@ -60,7 +60,7 @@ const Flow = {
       return next();
     }
     
-  }
+  },
   
   profile: {
     
