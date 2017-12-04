@@ -1,8 +1,7 @@
 const Flows = require('../flows')
 
-// TODO
-
-module.exports = function (flow, command) {
-    var subflow = Flows.newFlow(command.value, flow.player);
-    flow.child = subflow;
+module.exports = function (flow, command, context, scene) {
+    var subflow = Flows.create(command.value, flow.player, flow.environment)
+    flow.child = subflow
+    subflow.start(context, scene)
 }

@@ -13,7 +13,7 @@ Runner.prototype.state = async function (flowname) {
   try {
     var snapshot = await Snapshots.load(this.player, flowname)
     if(snapshot) {
-      return snapshot.scene // TODO
+      return snapshot.scene
     } else {
       return this.start(flowname)
     }
@@ -26,11 +26,11 @@ Runner.prototype.play = async function (flowname, action) {
   try {
     var snapshot = await Snapshots.load(this.player, flowname)
     if(snapshot) {
-      var flow = await Flows.load(snapshot.flow, this.player)  // TODO
-      var scene = await flow.play(actiom, snapshot.environment)
-      if(scene) { // TODO
+      var flow = await Flows.load(snapshot.flow, this.player, snapshot.environment)
+      var scene = await flow.play(action)
+      if(scene) {
         snapshot.scene = scene;
-        snapshot.flow = flow.save();  // TODO
+        snapshot.flow = flow.save();
         await Snapshots.save(this.player, snapshot)
       }
       return snapshot.scene
@@ -44,9 +44,9 @@ Runner.prototype.play = async function (flowname, action) {
 
 Runner.prototype.start = async function (flowname) {
   try {
-    var flow = Flows.create(flowname, this.player)
     var snapshot = Snapshots.create()
-    snapshot.scene = await flow.state(flowname, snapshot.environment)
+    var flow = Flows.create(flowname, this.player, snapshot.environment)
+    snapshot.scene = await flow.start()
     snapshot.flow = flow.save()
     await Snapshots.save(this.player, snapshot)
     return snapshot.scene
@@ -56,7 +56,15 @@ Runner.prototype.start = async function (flowname) {
 }
 
 Runner.prototype.stop = async function (flowname) {
-  // TODO
+  try {
+    var snapshot = await Snapshots.load(this.player, flowname)
+    if(snapshot) {
+      var flow = await Flows.load(snapshot.flow, this.player, snapshot.environment)
+      flow.stop() // TODO
+    }
+  } catch(err) {
+    return Promise.reject(err)
+  }
 }
     
-module.exports = Runner // TODO
+module.exports = Runner

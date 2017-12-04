@@ -1,4 +1,4 @@
-const occupationDomain = require('../domain/occupations');  // TODO
+const occupationDomain = require('../domain/occupations');
 
 const Character = {
   occupation: {

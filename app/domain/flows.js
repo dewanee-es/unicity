@@ -3,26 +3,39 @@ const Events = require('./events');
 const Snapshots = require('./snapshots');
 const States = require('./states');
 
-function Flow(name, player) {
+function Flow(name, player, environment) {
   this.name = name
   this.player = player
+  this.environment = environment
+  this.events = {}
 }
 
-Flow.create = function (name, player) {
-  return new Flow(name, player)
+Flow.create = function (name, player, environment) {
+  return require('./flows/' + name).create(name, player, environment)
 }
 
-// TODO
+Flow.load = async function (data, player, environment) {
+  var flow = Flow.create(data.name, player, environment)
+  flow.events = data.events
+  if(data.child) {
+    flow.child = Flow.load(data.child, player, environment) 
+  }
+  return flow
+}
 
-Flow.prototype.state = async function (name, environment) {
+Flow.prototype.state = async function (name, context, scene) {
   try {
     var state = await States.loadState(name)
-    var context = Context.newContext(this.name, this.player, environment)
-    var scene = {}
+    if(!context) {
+      context = Context.newContext(this.name, this.player, this.environment)
+    }
+    if(!scene) {
+      scene = {}
+    }
     this.events = {}
     var command = await States.bindState(state, context, scene, this.events)
     if(command) {
-      this.handleCommand(command, context, scene)
+      await this.handleCommand(command, context, scene)
     }
     return scene
   } catch(err) {
@@ -30,71 +43,51 @@ Flow.prototype.state = async function (name, environment) {
   }
 }
 
-function newFlow(name, player) {
-  return new Promise(function (resolve, reject) {
-    try {
-      var Flow = require('./flows/' + name);
-      resolve(Flow.create({
-        name: name,
-        player: player,
-        environment: {}
-      }));
-    } catch(e) {
-      reject(e);
-    }
-  });
-}
-
-exports.newFlow = newFlow;
-
-function currentState(flow) {
-  return new Promise(function (resolve, reject) {
-    Snapshots.loadSnapshot(flow)
-    .then(snapshot => {
-      if(snapshot === false) {
-        resolve(runState(flow, flow.name));
-      } else {
-        resolve(snapshot.state);
+Flow.prototype.play = async function(action) {
+  try {
+    if(this.child) {
+      return this.child.play(action)
+    } else {
+      var command = Events.onAction(this.events, action)
+      if(command) {
+        var context = Context.newContext(this.name, this.player, this.environment)
+        var scene = {}
+        await this.handleCommand(command, context, scene)
+        return scene
       }
-    })
-    .catch(err => {
-      console.log('ERROR: Load snapshot. ' + err.stack);
-      res.send(500);
-    });
-
-  })
+      return false
+    }
+  } catch(err) {
+    return Promise.reject(err)
+  }
 }
 
-exports.currentState = currentState;
-
-function executeAction(flow, action) {
-  return new Promise(function (resolve, reject) {
-    Snapshots.loadSnapshot(flow)
-      .then(snapshot => {
-        if(snapshot === false) {
-          resolve(runState(flow, flow.name));
-        } else {
-          var command = Events.onAction(snapshot.events, action);
-          if(command) {
-            resolve(handleCommand(flow, command));
-          } else {
-            resolve(snapshot.state);
-          }
-        }
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
+Flow.prototype.handleCommand = async function (command, context, scene) {
+  try {
+    var handler = require('./commands/' + command.name)
+    handler(this, command, context, scene)
+  } catch(err) {
+    return Promise.reject(err)
+  }
 }
 
-exports.executeAction = executeAction;
+Flow.prototype.save = function() {
+  var data = {
+    name: this.name,
+    events: this.events
+  }
+  if(this.child) {
+    data.child = this.child.save()
+  }
+  return data
+}
 
-function handleCommand(flow, command) {
-  return new Promise(function (resolve, reject) {
-    var handler = require('./commands/' + command.name);
-    resolve(handler(flow, command));
-  });
+Flow.prototype.start = async function (context, scene) {
+  try {
+    return await this.state(this.name, context, scene)
+  } catch(err) {
+    return Promise.reject(err)
+  }
 }
 
 module.exports = Flow
