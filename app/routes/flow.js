@@ -28,7 +28,7 @@ const Flow = {
       var player = req.player;
       
       if(player) {
-        Runner.create(player).start('game') // TODO
+        Runner.create(player).start('game')
           .then(result => {
             res.send(result);
           })
@@ -72,7 +72,7 @@ const Flow = {
       var player = req.player;
       
       if(player) {
-        Runner.create(player).stop('game') // TODO
+        Runner.create(player).stop('game')
           .then(result => {
             res.send(result);
           })
@@ -132,7 +132,7 @@ const Flow = {
       return next();
     },
 
-    go: function (req, res, next) { // TODO
+    go: function (req, res, next) {
       var player = req.player;
       var action = req.body ? req.body.action : false;
 

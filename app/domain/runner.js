@@ -60,7 +60,8 @@ Runner.prototype.stop = async function (flowname) {
     var snapshot = await Snapshots.load(this.player, flowname)
     if(snapshot) {
       var flow = await Flows.load(snapshot.flow, this.player, snapshot.environment)
-      flow.stop() // TODO
+      flow.stop()
+      await Snapshots.remove(this.player)
     }
   } catch(err) {
     return Promise.reject(err)

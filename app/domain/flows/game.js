@@ -1,17 +1,33 @@
-function Game(player) {
-  Flow.call(this, 'game', player)
+const Players = require('../players')
+
+function Game(player, environment) {
+  Flow.call(this, 'game', player, environment)
 }
 
 Game.prototype = Flow.prototype
 
 Game.prototype.constructor = Game
 
-Game.create = function (player) {
-  if(!player.complete) {
-    throw new Error('Incomplete player');
+Game.prototype.onStart = function () {
+  if(!this.player.complete) {
+    throw new Error('Incomplete player')
+  } else if(this.player.playing) {
+    throw new Error('Player already playing')
+  } else {
+    this.player.playing = true
+    Players.savePlayer(this.player)
   }
-  
-  return new Game(player);
+}
+
+Game.prototype.onStop = function() {
+  if(this.player.playing) {
+    this.player.playing = false
+    Players.savePlayer(this.player)
+  }
+}
+
+Game.create = function (player, environment) {
+  return new Game(player, environment)
 }
 
 module.exports = Game;

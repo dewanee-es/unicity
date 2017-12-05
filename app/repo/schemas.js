@@ -2,9 +2,9 @@ const { dictionary, empty, flags, map, number, schema, string } = require('../to
 
 var schemas = {};
 
-var increment = dictionary(number());   // eg. alcohol: 1, alcohol: -1
+//var increment = dictionary(number());   // eg. alcohol: 1, alcohol: -1
 
-var set = dictionary(number());         // eg. alcohol: 0, place: House
+var set = dictionary(number());         // eg. alcohol: 0, place: House. +number: increment. -number: decrement
 
 schemas.occupations = () =>
   dictionary(flags({
@@ -42,11 +42,11 @@ schemas.state = (loader) => {
     random:               // Execute random command
       dictionary(empty()),
     set: set,             // Set palyer attributes values
-    increment: increment, // Increment player attributes values
+    //increment: increment, // Increment player attributes values
     once:                 // Run only the first time player visit this state
       map({
         set: set,
-        increment: increment
+        //increment: increment
       }),
     call: string(),       // Call subflow
     view:                 // View representation

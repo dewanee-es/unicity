@@ -1,19 +1,15 @@
 var TokenGenerator = require('tokgen');
 var config = require('../../config/config.json');
 
-exports.genderFromNumber = function(number) {
-  return (number == '1' ? 'male' : (number == '2' ? 'female' : false));
-}
-
-exports.genderFromText = function(text) {
-  return (text == 'H' ? 'male' : (text == 'M' ? 'female' : false));
-}
-
 exports.shuffle = function(a) {
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
+}
+
+exports.random = function(a) {
+  return a[Math.floor(Math.random() * a.length)];
 }
 
 exports.randomBase64Code = function(length) {

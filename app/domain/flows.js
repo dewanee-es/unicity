@@ -84,7 +84,20 @@ Flow.prototype.save = function() {
 
 Flow.prototype.start = async function (context, scene) {
   try {
+    if(this.onStart) {
+      await this.onStart()
+    }
     return await this.state(this.name, context, scene)
+  } catch(err) {
+    return Promise.reject(err)
+  }
+}
+
+Flow.prototype.stop = async function () {
+  try {
+    if(this.onEnd) {
+      await this.onEnd()
+    }
   } catch(err) {
     return Promise.reject(err)
   }

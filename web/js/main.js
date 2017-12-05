@@ -1,5 +1,3 @@
-// TODO
-
 var fonemas = {};
 
 function hablar(personaje, texto) {

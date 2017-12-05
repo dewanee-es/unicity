@@ -1,4 +1,5 @@
-var dataRepo = require('../repo/data');
+const dataRepo = require('../repo/data')
+const tools = require('../tools/tools')
 
 var emptyPlayer = {
   id: false,          // number
@@ -93,5 +94,57 @@ exports.loadPlayer = function (id) {
       .catch(err => {
         reject(err);
       });
+  });
+}
+
+exports.savePlayer = function (player) {
+  return new Promise(function(resolve, reject) {
+    dataRepo.savePlayer(playerData)
+      .then(player => {
+        resolve(player);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+
+exports.randomPlayer = function (gender, attraction) {
+  if(gender == 'both') {
+    gender = tools.random(['male', 'female'])    
+  }
+  return new Promise(function(resolve, reject) {
+    var player = {
+      //id: false,
+      //completed: true,
+      //playing: true,
+      //email: false,
+      name: randomName(gender), // TODO
+      surname: randomSurname(), // TODO
+      gender: gender,
+      attraction: attraction,
+      birthDate: randomBirthdate(), // TODO
+      //gps: randomLocation(),
+      height: randomHeight(gender), // TODO
+      weight: randomWeight(gender), // TODO
+      occupation: randomOccupation(gender), // TODO
+      /*traits: {         
+        one: false,       // percent
+        two: false,       // percent
+        three: false,     // percent
+        four: false,      // percent
+        five: false       // percent
+      },
+      preferences: {
+        sound: false      // music, alerts, off
+      },*/
+      character: {
+        skin: randomSkin(), // TODO      
+        hair: randomHair(gender), // TODO    
+        eyes: randomEyes(gender), // TODO
+        extra: randomExtra(gender),       // TODO
+        outfit: randomOutfit(gender)      // TODO
+      }
+    }
   });
 }
