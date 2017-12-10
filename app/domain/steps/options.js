@@ -1,4 +1,4 @@
-const { shuffle } = require('../../tools/data_tools');
+const { shuffle } = require('../../tools/tools');
 const Events = require('../events');
 
 function Options(options) {

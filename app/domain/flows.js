@@ -11,7 +11,7 @@ function Flow(name, player, environment) {
 }
 
 Flow.create = function (name, player, environment) {
-  return require('./flows/' + name).create(name, player, environment)
+  return require('./flows/' + name).create(player, environment)
 }
 
 Flow.load = async function (data, player, environment) {

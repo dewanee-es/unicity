@@ -1,3 +1,5 @@
+const Flow = require('../flows')
+
 function Match(player, environment) {
   Flow.call(this, 'match', player, environment)
 }

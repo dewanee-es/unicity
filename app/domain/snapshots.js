@@ -13,7 +13,7 @@ const Snapshots = {
   load: async function (player, flowname) {
     try {
       var snapshot = await dataRepo.loadSnapshot(player.id)
-      if(snapshot.flow.name == flowname) {
+      if(snapshot && snapshot.flow && snapshot.flow.name == flowname) {
         return snapshot
       } else {
         return false

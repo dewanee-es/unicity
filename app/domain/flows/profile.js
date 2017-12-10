@@ -1,3 +1,5 @@
+const Flow = require('../flows')
+
 function Profile(player, environment) {
   Flow.call(this, 'profile', player, environment)
 }

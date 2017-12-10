@@ -1,3 +1,4 @@
+const Flow = require('../flows')
 const Players = require('../players')
 
 function Game(player, environment) {
@@ -11,9 +12,7 @@ Game.prototype.constructor = Game
 Game.prototype.onStart = function () {
   if(!this.player.complete) {
     throw new Error('Incomplete player')
-  } else if(this.player.playing) {
-    throw new Error('Player already playing')
-  } else {
+  } else if(!this.player.playing) {
     this.player.playing = true
     Players.savePlayer(this.player)
   }

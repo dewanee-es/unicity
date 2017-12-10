@@ -1,5 +1,5 @@
 var dataRepo = require('../repo/data');
-var { shuffle } = require('../tools/data_tools');
+var { shuffle } = require('../tools/tools');
 var Steps = require('./steps');
 var util = require('util');
 

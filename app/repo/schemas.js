@@ -1,4 +1,4 @@
-const { dictionary, empty, flags, map, number, schema, string } = require('../tools/schema_tools');
+const { dictionary, empty, flags, map, number, schema, string } = require('../tools/schema');
 
 var schemas = {};
 

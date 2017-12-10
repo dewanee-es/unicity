@@ -1,7 +1,7 @@
 var fs = require('fs');
 var yaml = require('js-yaml');
 var Schemas = require('./schemas');
-var { randomBase64Code } = require('../tools/data_tools');
+var { randomBase64Code } = require('../tools/tools');
 
 var loadData = function (name, type, schema) {
   return new Promise(function (resolve, reject) {

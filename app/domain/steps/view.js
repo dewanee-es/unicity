@@ -7,7 +7,7 @@ View.create = function (view) {
 }
 
 View.prototype.execute = function (context, scene) {
-  state.view = this.view;
+  scene.view = this.view;
 }
 
 module.exports = View;

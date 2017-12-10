@@ -99,7 +99,7 @@ exports.loadPlayer = function (id) {
 
 exports.savePlayer = function (player) {
   return new Promise(function(resolve, reject) {
-    dataRepo.savePlayer(playerData)
+    dataRepo.savePlayer(player)
       .then(player => {
         resolve(player);
       })
