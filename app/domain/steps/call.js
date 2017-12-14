@@ -9,7 +9,7 @@ Call.create = function (call) {
 }
 
 Call.prototype.execute = function () {
-  return Events.newEvent('call', call);
+  return Events.newEvent('call', this.call);
 }
 
 module.exports = Call;

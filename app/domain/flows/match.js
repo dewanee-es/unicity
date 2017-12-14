@@ -1,4 +1,5 @@
 const Flow = require('../flows')
+const Players = require('../players')
 
 function Match(player, environment) {
   Flow.call(this, 'match', player, environment)
