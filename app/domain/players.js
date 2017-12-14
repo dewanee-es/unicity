@@ -113,38 +113,37 @@ exports.randomPlayer = function (gender, attraction) {
   if(gender == 'both') {
     gender = tools.random(['male', 'female'])    
   }
-  return new Promise(function(resolve, reject) {
-    var player = {
-      //id: false,
-      //completed: true,
-      //playing: true,
-      //email: false,
-      name: randomName(gender), // TODO
-      surname: randomSurname(), // TODO
-      gender: gender,
-      attraction: attraction,
-      birthDate: randomBirthdate(), // TODO
-      //gps: randomLocation(),
-      height: randomHeight(gender), // TODO
-      weight: randomWeight(gender), // TODO
-      occupation: randomOccupation(gender), // TODO
-      /*traits: {         
-        one: false,       // percent
-        two: false,       // percent
-        three: false,     // percent
-        four: false,      // percent
-        five: false       // percent
-      },
-      preferences: {
-        sound: false      // music, alerts, off
-      },*/
-      character: {
-        skin: randomSkin(), // TODO      
-        hair: randomHair(gender), // TODO    
-        eyes: randomEyes(gender), // TODO
-        extra: randomExtra(gender),       // TODO
-        outfit: randomOutfit(gender)      // TODO
-      }
-    }
-  });
+  return {  // TODO
+    //id: false,
+    //completed: true,
+    //playing: true,
+    //email: false,
+    //name: randomName(gender),
+    //surname: randomSurname(),
+    name: tools.randomString(3, '1234567890'),
+    gender: gender,
+    attraction: attraction,
+    //birthDate: randomBirthdate(),
+    //gps: randomLocation(),
+    //height: randomHeight(gender),
+    //weight: randomWeight(gender),
+    //occupation: randomOccupation(gender),
+    /*traits: {         
+      one: false,       // percent
+      two: false,       // percent
+      three: false,     // percent
+      four: false,      // percent
+      five: false       // percent
+    },
+    preferences: {
+      sound: false      // music, alerts, off
+    },*/
+    /*character: {
+      skin: randomSkin(),      
+      hair: randomHair(gender),    
+      eyes: randomEyes(gender),
+      extra: randomExtra(gender),
+      outfit: randomOutfit(gender)
+    }*/
+  }
 }

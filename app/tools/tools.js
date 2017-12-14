@@ -1,24 +1,33 @@
-var TokenGenerator = require('tokgen');
-var config = require('../../config/config.json');
+const TokenGenerator = require('tokgen');
+const config = require('../../config/config.json');
 
-exports.shuffle = function(a) {
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-}
+const Tools = {
 
-exports.random = function(a) {
-  return a[Math.floor(Math.random() * a.length)];
-}
+  shuffle: function(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      [a[i], a[j]] = [a[j], a[i]]
+    }
+  },
 
-exports.randomBase64Code = function(length) {
-  if(!length) {
-    length = 1;
-  }
+  random: function(a) {
+    return a[Math.floor(Math.random() * a.length)]
+  },
+
+  randomBase64Code: function(length) {
+    return this.randomString(length, '0-9a-zA-Z+/')
+  },
   
-  let generator = new TokenGenerator({chars: '0-9a-zA-Z+/', length: length});
+  randomString: function(length, chars) {
+    if(!length) {
+      length = 1
+    }
   
-  return generator.generate();
+    let generator = new TokenGenerator({chars: chars, length: length})
+  
+    return generator.generate()
+  },
+  
 }
 
+module.exports = Tools

@@ -1,5 +1,7 @@
-Player
-======
+Player (Jugador)
+================
+
+* El jugador puede escoger una de las [profesiones](profesiones.md) existentes para su personaje
 
 Javascript
 ----------

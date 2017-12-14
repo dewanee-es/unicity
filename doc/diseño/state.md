@@ -1,6 +1,8 @@
 State
 =====
 
+* La descripción del estado que se muestra al jugador se indica en el elemento *[text](texto.md)* 
+
 Javascript
 ----------
 
